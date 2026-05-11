@@ -10,6 +10,13 @@ public class GameManager : MonoBehaviour
 
     public PlayerInput playerInput;
 
+    public enum GameState
+    {
+        Iniciando,
+        MenuPrincipal,
+        Gameplay
+    }
+
     private void Awake()
     {
         if (Instance == null)
@@ -26,7 +33,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         ChangeState(GameState.Iniciando);
-        LoadScene("Splash");
+        SceneManager.LoadScene("Splash");
     }
 
     public void ChangeState(GameState newState)
@@ -37,33 +44,31 @@ public class GameManager : MonoBehaviour
 
     public void LoadScene(string sceneName)
     {
-        switch (currentState)
+        switch (sceneName)
         {
-            case GameState.Iniciando:
-                if (sceneName == "Splash")
-                {
-                    SceneManager.LoadScene(sceneName);
-                }
+            case "Splash":
+                SceneManager.LoadScene(sceneName);
                 break;
 
-            case GameState.MenuPrincipal:
-                if (sceneName == "GetStarted_Scene")
-                {
-                    SceneManager.LoadScene(sceneName);
-                    ChangeState(GameState.Gameplay);
-                }
+            case "MenuPrincipal":
+                SceneManager.LoadScene(sceneName);
+                ChangeState(GameState.MenuPrincipal);
                 break;
 
-            case GameState.Gameplay:
-                Debug.Log("Você já está em Gameplay.");
+            case "GetStarted_Scene":
+                SceneManager.LoadScene(sceneName);
+                ChangeState(GameState.Gameplay);
+                break;
+
+            default:
+                Debug.LogWarning("Cena não reconhecida: " + sceneName);
                 break;
         }
     }
 
     public void LoadMenu()
     {
-        SceneManager.LoadScene("MenuPrincipal");
-        ChangeState(GameState.MenuPrincipal);
+        LoadScene("MenuPrincipal");
     }
 
     public void AssignPlayerInput(PlayerInput input)
