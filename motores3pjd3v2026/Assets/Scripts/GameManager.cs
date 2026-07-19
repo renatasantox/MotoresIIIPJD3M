@@ -57,6 +57,12 @@ public class GameManager : MonoBehaviour
 
             case "GetStarted_Scene":
                 SceneManager.LoadScene(sceneName);
+
+                SceneManager.LoadScene(
+                    "GUI",
+                    LoadSceneMode.Additive
+                );
+                
                 ChangeState(GameState.Gameplay);
                 break;
 
@@ -74,6 +80,6 @@ public class GameManager : MonoBehaviour
     public void AssignPlayerInput(PlayerInput input)
     {
         playerInput = input;
-        Debug.Log("Player Input atribuído com sucesso.");
+        Debug.Log("PlayerInput alocado.");
     }
 }
