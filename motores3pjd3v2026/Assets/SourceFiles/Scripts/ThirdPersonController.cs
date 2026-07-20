@@ -1,4 +1,4 @@
-﻿ using UnityEngine;
+﻿using UnityEngine;
 #if ENABLE_INPUT_SYSTEM 
 using UnityEngine.InputSystem;
 #endif
@@ -119,6 +119,8 @@ public bool IsRespawning { get; set; } = false;
         private const float _threshold = 0.01f;
 
         private bool _hasAnimator;
+        
+        private int _coinCount = 0;
 
         private bool IsCurrentDeviceMouse
         {
@@ -151,6 +153,7 @@ public bool IsRespawning { get; set; } = false;
     _input = GetComponent<StarterAssetsInputs>();
 #if ENABLE_INPUT_SYSTEM 
     _playerInput = GetComponent<PlayerInput>();
+    GameManager.Instance.AssignPlayerInput(_playerInput);
 #else
 	Debug.LogError("Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif
@@ -427,7 +430,21 @@ public bool IsRespawning { get; set; } = false;
 
     Debug.Log($"Camera Yaw reset to {targetYaw} degrees.");
 }
-    }
 
-    
+        private void OnEnable()
+        {
+            PlayerObserverManager.OnCoinCollected += CollectCoin;
+        }
+
+        private void OnDisable()
+        {
+            PlayerObserverManager.OnCoinCollected -= CollectCoin;
+            
+        }
+        public void CollectCoin()
+        {
+            _coinCount++;
+            PlayerObserverManager.NotifyCoinCountChanged(_coinCount);
+        }
+    }
 }
